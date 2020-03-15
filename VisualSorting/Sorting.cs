@@ -25,7 +25,6 @@ namespace VisualSorting
         void GenerateRandomValues()
         {
             int calcWidth = 0;
-            int x = 0;
             while (calcWidth < (Form1.Width + 10))
             {
                 int randomSort = this.rnd.Next(10, this.formHeight);
@@ -33,7 +32,6 @@ namespace VisualSorting
                 {
                     this.sortValues.Add(new SortLine(calcWidth, randomSort));
                     calcWidth += Form1.PenWidth;
-                    x += 10;
                 }
             }
         }
