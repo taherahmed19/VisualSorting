@@ -26,14 +26,13 @@ namespace VisualSorting
         {
             int calcWidth = 0;
             int x = 0;
-            while(calcWidth < (Form1.Width + 10))
+            while (calcWidth < (Form1.Width + 10))
             {
-                int randomSort = this.rnd.Next(0, this.formHeight);
+                int randomSort = this.rnd.Next(10, this.formHeight);
                 if (!(this.sortValues.Where(item => item.length == randomSort).Count() > 0))
                 {
-                    this.sortValues.Add(new SortLine(x, randomSort));
-                    Console.WriteLine(randomSort + " " + x);
-                    calcWidth += 10;
+                    this.sortValues.Add(new SortLine(calcWidth, randomSort));
+                    calcWidth += Form1.PenWidth;
                     x += 10;
                 }
             }
@@ -42,16 +41,14 @@ namespace VisualSorting
         public void BubbleSort(int index)
         {
             int temp = -1;
-                if (this.sortValues[index].length > this.sortValues[index + 1].length)
-                {
-                    Console.WriteLine("Swapping " + this.sortValues[index].length + " and " + this.sortValues[index + 1].length);
-                    temp = this.sortValues[index].length;
-                    this.sortValues[index].length = this.sortValues[index + 1].length;
-
-                    this.sortValues[index + 1].length = temp;
-                    this.sortValues[index].swaped = true;
-                    this.sortValues[index + 1].swaped = true;
-                }
+            if (this.sortValues[index].length > this.sortValues[index + 1].length)
+            {
+                temp = this.sortValues[index].length;
+                this.sortValues[index].length = this.sortValues[index + 1].length;
+                this.sortValues[index + 1].length = temp;
+                this.sortValues[index].swaped = true;
+                this.sortValues[index + 1].swaped = true;
+            }
         }
     }
 }

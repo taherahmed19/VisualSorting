@@ -20,7 +20,8 @@ namespace VisualSorting
         public const int Height = 1080;
         public const int Width = 1920;
         public const float BorderWidth = 2.0f;
-       
+        public const int PenWidth = 10;
+
         Sorting sort;
         int counter = 0;
         int length = 0;
@@ -50,48 +51,15 @@ namespace VisualSorting
 
             pen = new Pen(Color.Black, Form1.BorderWidth);
             pen.Alignment = PenAlignment.Inset;
-            pen.Width = 10;
+            pen.Width = PenWidth;
 
             sort = new Sorting(Form1.Height, Form1.Width);
             length = sort.sortValues.Count - 1;
+
+
         }
-
-
 
         void GameTimer_Tick(object sender, EventArgs e)
-        {
-            if (keyPress == (int)Keys.Space)
-            {
-                if (counter < length)
-                {
-                    sort.BubbleSort(counter);
-                    counter++;
-                }
-                else
-                {
-                    counter = 0;
-                    length--;
-                }
-            }
-            Draw(counter);
-        }
-
-        void DrawSort(Graphics g, Pen pen)
-        {
-            for (var i = 0; i < sort.sortValues.Count; i++)
-            {
-                if(sort.sortValues[i].swaped == true)
-                {
-                    pen.Color = Color.DarkCyan;
-                    g.DrawLine(pen, sort.sortValues[i].x, 0, sort.sortValues[i].x, Form1.Height);
-                    pen.Color = Color.Red;
-                }
-                pen.Color = Color.Black;
-                g.DrawLine(pen, sort.sortValues[i].x, 0, sort.sortValues[i].x, sort.sortValues[i].length);
-            }
-        }
-
-        void Draw(int counter)
         {
             Invalidate();
 
@@ -99,9 +67,74 @@ namespace VisualSorting
             {
                 using (var g = Graphics.FromImage(Backbuffer))
                 {
-                    DrawSort(g, pen);
-                    Highlight(counter, g);
+                    if (keyPress == (int)Keys.Space)
+                    {
+
+                        if (length == 0)
+                        {
+                            this.PrintEndMessage(g);
+                        }
+                        else
+                        {
+                            if (counter < length)
+                            {
+                                sort.BubbleSort(counter);
+                                counter++;
+                            }
+                            else
+                            {
+                                counter = 0;
+                                length--;
+                            }
+                        }
+                    }
+                    Draw(counter, g);
                 }
+            }
+        }
+
+        void DrawSort(Graphics g, Pen pen)
+        {
+            for (var i = 0; i < sort.sortValues.Count; i++)
+            {
+                if(sort.sortValues[i].swaped == true && length > 0)
+                {
+                    pen.Color = Color.DarkCyan;
+                    g.DrawLine(pen, sort.sortValues[i].x, 0, sort.sortValues[i].x, Form1.Height);
+                }
+                pen.Color = Color.Black;
+                g.DrawLine(pen, sort.sortValues[i].x, 0, sort.sortValues[i].x, sort.sortValues[i].length);
+            }
+        }
+
+        void Draw(int counter, Graphics g)
+        {
+            DrawSort(g, pen);
+            if(counter > -1)
+            {
+                Highlight(counter, g);
+            }
+        }
+
+        void PrintEndMessage(Graphics g)
+        {
+            Console.WriteLine("Print message");
+            int height = 100;
+            int width = 500;
+            int x = 20;
+            int y = 800;
+
+            string text1 = "Finished Bubble Sort";
+            using (Font font1 = new Font("Arial", 30, FontStyle.Regular, GraphicsUnit.Point))
+            {
+                Rectangle rect1 = new Rectangle(x, y, width, height);
+                
+                StringFormat stringFormat = new StringFormat();
+                stringFormat.Alignment = StringAlignment.Center;
+                stringFormat.LineAlignment = StringAlignment.Center;
+
+                g.DrawString(text1, font1, Brushes.White, rect1, stringFormat);
+                g.DrawRectangle(Pens.DarkCyan, rect1);
             }
         }
 
